@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title
+	th:text="${appointment.id == null ? 'Book Appointment' : 'Edit Appointment'}">
+	Appointment Form</title>
+
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	background-color: AliceBlue;
+}
+
+.container {
+	width: 90%;
+	max-width: 700px;
+	margin: 40px auto;
+}
+
+.form-card {
+	background-color: White;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0px 2px 8px LightGray;
+}
+
+h1 {
+	margin-top: 0;
+	color: Black;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+label {
+	display: block;
+	margin-bottom: 7px;
+	font-weight: bold;
+}
+
+input, select {
+	width: 100%;
+	padding: 11px;
+	border: 1px solid Gray;
+	border-radius: 5px;
+	box-sizing: border-box;
+	font-size: 15px;
+}
+
+.error {
+	color: Red;
+	margin-top: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.button-group {
+	display: flex;
+	gap: 12px;
+	margin-top: 25px;
+}
+
+.save-button {
+	padding: 11px 18px;
+	background-color: DodgerBlue;
+	color: White;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 15px;
+}
+
+.save-button:hover {
+	background-color: RoyalBlue;
+}
+
+.cancel-button {
+	display: inline-block;
+	padding: 11px 18px;
+	background-color: DimGray;
+	color: White;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 15px;
+}
+
+.cancel-button:hover {
+	background-color: Gray;
+}
+</style>
+
+</head>
+
+<body>
+
+	<div class="container">
+
+		<div class="form-card">
+
+			<h1
+				th:text="${appointment.id == null ? 'Book New Appointment' : 'Edit Appointment'}">
+				Appointment</h1>
+
+			<form method="post" th:action="@{/saveAppointment}"
+				th:object="${appointment}">
+
+				<input type="hidden" th:field="*{id}">
+
+				<div class="form-group">
+
+					<label for="doctor">Doctor</label> <select id="doctor"
+						th:field="*{doctor}" required>
+
+						<option value="">Select Doctor</option>
+
+						<option th:each="doctor : ${doctorList}" th:value="${doctor.id}"
+							th:text="${doctor.firstName + ' ' + doctor.lastName + ' - ' + doctor.specialization}">
+						</option>
+
+					</select>
+
+				</div>
+
+				<div class="form-group">
+
+					<label for="patient">Patient</label> <select id="patient"
+						th:field="*{patient}" required>
+
+						<option value="">Select Patient</option>
+
+						<option th:each="patient : ${patientList}"
+							th:value="${patient.id}"
+							th:text="${patient.firstName + ' ' + patient.lastName}">
+						</option>
+
+					</select>
+
+				</div>
+
+				<div class="form-group">
+
+					<label for="appointmentDateTime"> Date and Time </label> <input
+						type="datetime-local" id="appointmentDateTime"
+						th:field="*{appointmentDateTime}" required>
+
+					<div class="error"
+						th:if="${#fields.hasErrors('appointmentDateTime')}">
+
+						<span th:errors="*{appointmentDateTime}"> </span>
+
+					</div>
+
+				</div>
+
+				<div class="form-group">
+
+					<label for="reason"> Reason </label> <input type="text" id="reason"
+						th:field="*{reason}" placeholder="Enter appointment reason"
+						required>
+
+				</div>
+
+				<div class="form-group">
+
+					<label for="status"> Status </label> <select id="status"
+						th:field="*{status}" required>
+
+						<option value="">Select Status</option>
+
+						<option th:each="status : ${statusList}" th:value="${status}"
+							th:text="${status}"></option>
+
+					</select>
+
+				</div>
+
+				<div class="button-group">
+
+					<button class="save-button" type="submit"
+						th:text="${appointment.id == null ? 'Book Appointment' : 'Save Changes'}">
+						Save</button>
+
+					<a class="cancel-button" href="/"> Cancel </a>
+
+				</div>
+
+			</form>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>
